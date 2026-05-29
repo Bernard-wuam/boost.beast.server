@@ -1,0 +1,78 @@
+
+hello
+Success [system:0]
+
+hello
+Success [system:0]
+Thu Apr 16 15:37:11 2026
+
+hello
+Success [system:0]
+Thu Apr 16 15:37:28 2026
+
+hello
+Success [system:0]
+Thu Apr 16 15:41:11 2026
+
+hello
+Success [system:0]
+Fri Apr 17 02:13:54 2026
+
+hello
+Success [system:0]
+Fri Apr 17 02:44:43 2026
+
+hello
+Success [system:0]
+Fri Apr 17 02:56:59 2026
+
+hello
+Success [system:0]
+Fri Apr 17 02:57:53 2026
+
+// void setHttpOnlyCookie(http::response<http::string_body>& res,
+//                        const std::string& name,
+//                        const std::string& value,
+//                        std::chrono::seconds max_age) {
+//     // The cookie string must be formatted exactly as the Set-Cookie header
+//     spec requires. std::string cookie = name + "=" + value +
+//         "; HttpOnly"           // Cannot be accessed by JavaScript
+//         "; Secure"             // Only sent over HTTPS
+//         "; SameSite=Strict"    // Only sent for same-site requests
+//         "; Path=/"             // Cookie valid for the entire domain
+//         "; Max-Age=" + std::to_string(max_age.count());
+
+//     res.set(http::field::set_cookie, cookie);
+// }
+
+// setHttpOnlyCookie(res, "refresh_token", refresh_token,
+// std::chrono::seconds(604800)); res.result(http::status::ok); res.body() =
+// access_token_json; // Your JSON response containing the access_token
+// res.set(http::field::content_type, "application/json");
+
+CREATE TABLE users(
+user_id BIGINT UNSIGNED AUTO_INCREMENT,
+public_id VARCHARACTER(36) NOT NULL,
+profile_picture VARCHAR(150) DEFAULT NULL,
+username VARCHAR(50) NOT NULL,
+ email VARCHAR(100) NOT NULL,
+ password VARCHAR(255),
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+last_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+PRIMARY KEY(user_id),
+UNIQUE KEY `idx_public_id` (public_id), 
+UNIQUE KEY `idx_username`(username),
+UNIQUE KEY `idx_email` (email),
+UNIQUE KEY `idx_profile_picture` (profile_picture)
+);
+
+-- All posts in 'music' category
+SELECT p.* FROM posts p
+JOIN categories c ON p.category_id = c.category_id
+WHERE c.category_name = 'music';
+
+-- Count posts per category
+SELECT c.category_name, COUNT(p.post_id) AS post_count
+FROM categories c
+LEFT JOIN posts p ON c.category_id = p.category_id
+GROUP BY c.category_id;

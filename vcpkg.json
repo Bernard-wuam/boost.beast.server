@@ -1,0 +1,15 @@
+{
+  "dependencies": [
+    "boost-beast",
+    "boost-charconv",
+    "boost-json",
+    "boost-log",
+    "boost-mysql",
+    "boost-url",
+    "boost-uuid",
+    "jwt-cpp",
+    "openssl",
+    "picojson",
+    "pthreads"
+  ]
+}
