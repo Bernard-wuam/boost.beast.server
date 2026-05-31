@@ -3,7 +3,6 @@
 #include "apperror/apperror.h"
 #include "posts/schemas/createpostschema.h"
 #include "posts/schemas/jwtuserinfoschema.h"
-#include "posts/schemas/sendpostschema.h"
 #include <bcrypt/BCrypt.hpp>
 #include <boost/asio.hpp>
 #include <boost/asio/awaitable.hpp>

@@ -130,7 +130,7 @@ public:
 
     auto accessToken = Security::createJwt(
         boost::json::object{{"public_id", public_id}, {"role", role}},
-        std::chrono::system_clock::now() + std::chrono::seconds(30), "");
+        std::chrono::system_clock::now() + std::chrono::seconds(30), SECRETEKEY);
 
     co_return SendRefreshAndAcessTokenSchema(accessToken,newRefreshToken) ;
   }
