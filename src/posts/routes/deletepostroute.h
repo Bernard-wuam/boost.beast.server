@@ -59,8 +59,6 @@ boost::asio::awaitable<
   boost::beast::http::request_parser<boost::beast::http::string_body>
       requestString{std::move(request)};
   requestString.body_limit(boost::none);
-  std::cout << requestString.get()[boost::beast::http::field::content_type]
-            << std::endl;
   boost::beast::error_code ec;
 
   auto rz = co_await boost::beast::http::async_read(

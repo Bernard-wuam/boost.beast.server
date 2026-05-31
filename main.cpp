@@ -4,6 +4,7 @@
 #include <boost/beast/core/error.hpp>
 #include <boost/json/object.hpp>
 #include <boost/json/value.hpp>
+#include <boost/mysql/handshake_params.hpp>
 #include <chrono>
 #include <csignal>
 #include <exception>
@@ -61,6 +62,7 @@ int main(int, char **) {
   Server server;
   boost::asio::io_context ioc;
 
+  
   boost::mysql::pool_params poolParams;
   poolParams.server_address.emplace_host_and_port("localhost", 33061);
   poolParams.password = "1914";

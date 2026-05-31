@@ -3,6 +3,7 @@
 #include <string>
 
 struct CreatePostSchema {
+  std::string public_id = "a51a1dd3-4860-11f1-8c5f-00155dfeed4c";
   std::string title = "the king of flies";
   std::string content =
       "The book was, awsome, the writter has, a good story telling technique.";
