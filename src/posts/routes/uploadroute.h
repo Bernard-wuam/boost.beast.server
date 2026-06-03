@@ -2,7 +2,7 @@
 
 #include "apperror/apperror.h"
 #include "jsonresponse/jsonresponse.h"
-#include <algorithm>
+#include "security/security.h"
 #include <boost/asio.hpp>
 #include <boost/asio/awaitable.hpp>
 #include <boost/asio/io_context.hpp>
@@ -50,6 +50,15 @@ boost::asio::awaitable<
                                                boost::mysql::connection_pool
                                                    &connPool) {
   // check the header if the user is authenticated before they can post.
+  auto isAuthorizedExpected = Security::verifyJwt(request.get(), SECRETEKEY);
+
+  if (!isAuthorizedExpected.has_value()) {
+    std::cout << "unaurthozied" << std::endl;
+    co_return JsonResponse::sendJsonBadResponse(request.get().version(), false,
+                                                isAuthorizedExpected.error());
+  }
+
+  auto user = isAuthorizedExpected.value();
 
   boost::beast::http::request_parser<boost::beast::http::file_body>
       requestString{std::move(request)};
@@ -62,18 +71,22 @@ boost::asio::awaitable<
   boost::uuids::random_generator randGen;
 
   std::string filename = boost::uuids::to_string(randGen());
-
+  auto public_id = filename;
   std::string mimetype = requestString.get()
                              .find(boost::beast::http::field::content_type)
                              ->value();
+  std::cout << mimetype << " : the mimetype" << std::endl;
   auto index = mimetype.rfind("/");
   std::string mimeExtension = "." + mimetype.substr(index + 1, mimetype.size());
-  
+
   filename.append(mimeExtension);
   filePath.append("assets/posts/image").append(filename);
 
+  std::cout << filePath.c_str() << std::endl;
+
   boost::json::object imageDetails{
-      {"postImage", std::string{"posts/image/"} + filename}};
+      {"postImage", std::string{"http://localhost:5333/api/posts/image/"} + filename},
+      {"publicId", public_id}};
 
   requestString.get().body().open(filePath.c_str(),
                                   boost::beast::file_mode::write, ec);
@@ -89,7 +102,7 @@ boost::asio::awaitable<
       socket_stream, flatBuffer, requestString,
       boost::asio::redirect_error(ec));
 
-  // std::cout << " after reading" << std::endl;
+  std::cout << " after reading file image" << std::endl;
   if (ec) {
     std::cerr << "error from reading inside /api/post/upload/" << std::endl;
     std::cerr << ec.what() << std::endl;
@@ -98,7 +111,7 @@ boost::asio::awaitable<
     co_return JsonResponse::sendJsonBadResponse(requestString.get().version(),
                                                 false, erc);
   }
-
+  std::cout << "returning a value" << std::endl;
   co_return JsonResponse::sendJsonResponse(requestString.get().version(),
                                            requestString.get().keep_alive(),
                                            imageDetails);

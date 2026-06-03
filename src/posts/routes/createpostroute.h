@@ -55,10 +55,7 @@ boost::asio::awaitable<
                                                    boost::mysql::connection_pool
                                                        &connPool) {
   // check the header if the user is authenticated before they can post.
-  auto isAuthorizedExpected = Security::verifyJwt(request.get(), "");
-
-  std::cout << request.get().keep_alive()
-            << " after authorization in post route" << std::endl;
+  auto isAuthorizedExpected = Security::verifyJwt(request.get(), SECRETEKEY);
 
   if (!isAuthorizedExpected.has_value())
     co_return JsonResponse::sendJsonBadResponse(request.get().version(),

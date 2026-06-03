@@ -1,8 +1,8 @@
 
 #pragma once
 #include "apperror/apperror.h"
-#include "users/schemas/sendrefreshandaccesstokenschema.h"
 #include "security/security.h"
+#include "users/schemas/sendrefreshandaccesstokenschema.h"
 #include <bcrypt/BCrypt.hpp>
 #include <boost/asio.hpp>
 #include <boost/asio/awaitable.hpp>
@@ -106,14 +106,14 @@ public:
             "{0};  "
 
             "INSERT INTO users_refresh_token(refresh_token_user_id,expires_at) "
-            "VALUES({0},current_timestamp() + INTERVAL 20 SECOND);"
+            "VALUES({0},current_timestamp() + INTERVAL {1} DAY);"
 
             "SELECT refresh_token FROM users_refresh_token "
             "WHERE "
             "refresh_token_id = LAST_INSERT_ID();"
 
             "COMMIT;",
-            user_id),
+            user_id, REFRESHTOKENEXPIRATIONTIME),
         result2, diag, boost::asio::redirect_error(ec));
     getCon.return_without_reset();
 
@@ -130,8 +130,9 @@ public:
 
     auto accessToken = Security::createJwt(
         boost::json::object{{"public_id", public_id}, {"role", role}},
-        std::chrono::system_clock::now() + std::chrono::seconds(30), SECRETEKEY);
+        std::chrono::system_clock::now() + std::chrono::seconds(ACCESSTOKENEXPIRATIONTIME),
+        SECRETEKEY);
 
-    co_return SendRefreshAndAcessTokenSchema(accessToken,newRefreshToken) ;
+    co_return SendRefreshAndAcessTokenSchema(accessToken, newRefreshToken);
   }
 };

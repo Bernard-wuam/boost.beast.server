@@ -12,4 +12,4 @@ struct CreatePostSchema {
   std::string category;
 };
 BOOST_DESCRIBE_STRUCT(CreatePostSchema, (),
-                      (title, content, image_url, category));
+                      (public_id, title, content, image_url, category));

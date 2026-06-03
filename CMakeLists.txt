@@ -34,7 +34,7 @@ target_link_libraries(server PRIVATE Server Boost::beast
     Boost::charconv OpenSSL::Crypto OpenSSL::SSL
     Boost::mysql Threads::Threads ${LIBSODIUM_LIBRARIES}
     AppErrorCode)
-    
+
 target_compile_definitions(server PUBLIC CURRENTPATH="${CMAKE_CURRENT_LIST_DIR}"
     REFRESHTOKENEXPIRATIONTIME=${refreshTokenExpirationTime}
     ACCESSTOKENEXPIRATIONTIME=${accessTokenExpirationTime}

@@ -75,7 +75,6 @@ public:
             "WHERE username = {0} OR email = {0};",
             user.emailOrUsername),
         result, diag, boost::asio::redirect_error(ec));
-    // getCon.return_without_reset();
 
     if (ec) {
       std::cerr << ec.what() << " from 1" << std::endl;
@@ -112,7 +111,7 @@ public:
                                                     WHERE public_id = {0};
                                                     INSERT INTO users_refresh_token(refresh_token_user_id,expires_at) 
                                                     VALUES((SELECT user_id FROM users WHERE public_id = {0}),
-                                                    current_timestamp() + INTERVAL {1} SECOND);
+                                                    current_timestamp() + INTERVAL {1} DAY);
                                                     SELECT refresh_token FROM users_refresh_token WHERE 
                                                     refresh_token_id = LAST_INSERT_ID(); 
                                                     COMMIT;
