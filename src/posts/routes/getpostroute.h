@@ -89,7 +89,7 @@ boost::asio::awaitable<
 
   std::optional<JwtUserInfoSchema> user = std::nullopt;
 
-  auto userExpected = Security::verifyJwt(requestString.get(), "");
+  auto userExpected = Security::verifyJwt(requestString.get(), SECRETEKEY);
 
   if (userExpected.has_value())
     user = userExpected.value();
