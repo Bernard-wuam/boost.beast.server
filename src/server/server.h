@@ -9,6 +9,7 @@
 #include "likes/routes/deletelikeroute.h"
 #include "posts/routes/createpostroute.h"
 #include "posts/routes/deletepostroute.h"
+#include "posts/routes/editpostroute.h"
 #include "posts/routes/getallpostroute.h"
 #include "posts/routes/getimageroute.h"
 #include "posts/routes/getpostbycategoryroute.h"
@@ -125,6 +126,13 @@ public:
     if (regexPath.isMatched(request.get().target()) &&
         request.get().method() == boost::beast::http::verb::delete_) {
       co_return (co_await DeletePostRoute::deletePostRoute(
+          socket_stream, request, _flat_buf, connPool, regexPath));
+    }
+
+    
+    if (regexPath.isMatched(request.get().target()) &&
+        request.get().method() == boost::beast::http::verb::put) {
+      co_return (co_await EditPostRoute::editPostRoute(
           socket_stream, request, _flat_buf, connPool, regexPath));
     }
 

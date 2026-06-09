@@ -8,6 +8,7 @@ target_sources(
     FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/routes/postroute.h
     ${CMAKE_CURRENT_SOURCE_DIR}/routes/createpostroute.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/routes/editpostroute.h
     ${CMAKE_CURRENT_SOURCE_DIR}/routes/getpostroute.h
     ${CMAKE_CURRENT_SOURCE_DIR}/routes/deletepostroute.h
     ${CMAKE_CURRENT_SOURCE_DIR}/routes/getpostbycategoryroute.h
@@ -15,6 +16,7 @@ target_sources(
     ${CMAKE_CURRENT_SOURCE_DIR}/routes/uploadroute.h
     ${CMAKE_CURRENT_SOURCE_DIR}/routes/getimageroute.h
     ${CMAKE_CURRENT_SOURCE_DIR}/db/createpostdb.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/db/editpostdb.h
     ${CMAKE_CURRENT_SOURCE_DIR}/db/deletepostdb.h
     ${CMAKE_CURRENT_SOURCE_DIR}/db/getpostdb.h
     ${CMAKE_CURRENT_SOURCE_DIR}/db/getallpostdb.h
@@ -22,6 +24,7 @@ target_sources(
     ${CMAKE_CURRENT_SOURCE_DIR}/db/getpostbycategorydb.h
     ${CMAKE_CURRENT_SOURCE_DIR}/db/getpostbyuserdb.h
     ${CMAKE_CURRENT_SOURCE_DIR}/schemas/createpostschema.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/schemas/editpostschema.h
     ${CMAKE_CURRENT_SOURCE_DIR}/schemas/getpostschema.h
     ${CMAKE_CURRENT_SOURCE_DIR}/schemas/sendpostschema.h
     ${CMAKE_CURRENT_SOURCE_DIR}/schemas/jwtuserinfoschema.h

@@ -71,11 +71,13 @@ public:
     co_await getCon->async_execute(boost::mysql::with_params(
                                        R"(
                                                   SELECT JSON_OBJECT('isyourpost',{} = users.public_id,
-                                                  'title', posts.title, 'post',posts.content,'post_img',posts.image_url,
+                                                  'title', posts.title, 'post',posts.content,'post_img',posts.image_url,'category',categories.name,
                                                   'user',users.username,'profile_picture',users.profile_picture,
                                                   'created_at',posts.created_at)
                                                   FROM posts
                                                   INNER JOIN users ON posts.poster_user_id = users.user_id
+                                                  INNER JOIN posts_categories ON posts.post_id = posts_categories.post_id
+                                                  INNER JOIN categories ON posts_categories.categories_id = categories.categories_id
                                                   WHERE posts.public_id = {};
                                                 )",
                                        user_public_id, index),
