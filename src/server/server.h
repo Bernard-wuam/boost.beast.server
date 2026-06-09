@@ -114,6 +114,14 @@ public:
     }
     // get a single post route and delete a single post route.
 
+    if (request.get().target() == "/api/user/image/upload" &&
+        request.get().method() == boost::beast::http::verb::post) {
+      std::cout << "/api/user/image/upload" << std::endl;
+      co_return (co_await UploadRoute::uploadRoute(socket_stream, request,
+                                                   _flat_buf, connPool));
+    }
+    // get a single post route and delete a single post route.
+
     RegexPath regexPath(
         R"(/api/posts/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$)");
 
@@ -129,7 +137,6 @@ public:
           socket_stream, request, _flat_buf, connPool, regexPath));
     }
 
-    
     if (regexPath.isMatched(request.get().target()) &&
         request.get().method() == boost::beast::http::verb::put) {
       co_return (co_await EditPostRoute::editPostRoute(
@@ -251,13 +258,13 @@ public:
 
     //.....................................images........................................................
 
-    regexPath.setRegexUrl(R"(/api/posts/image/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\.(jpg|png|jpeg|svg|gif|avif|webp)$)");
+    regexPath.setRegexUrl(
+        R"(/api/posts/image/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\.(jpg|png|jpeg|svg|gif|avif|webp)$)");
 
     if (regexPath.isMatched(request.get().target()) &&
         request.get().method() == boost::beast::http::verb::get) {
       std::cout << "images route is hit" << std::endl;
-      co_return (co_await GetImageRoute::getImageRoute(
-          socket_stream, request));
+      co_return (co_await GetImageRoute::getImageRoute(socket_stream, request));
     }
 
     std::cout << "reached home route" << std::endl;
