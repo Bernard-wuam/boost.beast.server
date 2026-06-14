@@ -8,6 +8,7 @@
 #include <boost/json/object.hpp>
 #include <chrono>
 #include <expected>
+#include <format>
 #include <iterator>
 #include <jwt-cpp/base.h>
 #include <jwt-cpp/jwt.h>

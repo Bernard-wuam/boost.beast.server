@@ -88,9 +88,14 @@ public:
 
     auto isExpired = static_cast<bool>(result.at(1).rows()[0][0].as_int64());
 
+    std::cout << refreshToken << " the refresh token " << std::endl;
+    std::cout << isExpired << " is expired " << std::endl;
+
     if (isExpired) {
       co_return std::unexpected(makeErrorCode(AppError::RefreshToken_Expired));
     }
+
+    std::cout << "proceed" << std::endl;
 
     auto public_id = result.at(1).rows()[0][1].as_string();
     auto role = result.at(1).rows()[0][2].as_string();
@@ -130,7 +135,8 @@ public:
 
     auto accessToken = Security::createJwt(
         boost::json::object{{"public_id", public_id}, {"role", role}},
-        std::chrono::system_clock::now() + std::chrono::seconds(ACCESSTOKENEXPIRATIONTIME),
+        std::chrono::system_clock::now() +
+            std::chrono::seconds(ACCESSTOKENEXPIRATIONTIME),
         SECRETEKEY);
 
     co_return SendRefreshAndAcessTokenSchema(accessToken, newRefreshToken);

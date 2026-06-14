@@ -16,8 +16,11 @@
 #include "posts/routes/getpostbyuserroute.h"
 #include "posts/routes/getpostroute.h"
 #include "posts/routes/uploadroute.h"
+#include "profilepictures/routes/getprofilepictureroute.h"
+#include "profilepictures/routes/profilepictureuploadroute.h"
 #include "regexrouter/regexrouter.h"
 #include "users/routes/createuserroute.h"
+#include "users/routes/getuserroute.h"
 #include "users/routes/loginuserroute.h"
 #include "users/routes/refreshuserroute.h"
 #include <boost/asio.hpp>
@@ -97,6 +100,13 @@ public:
           socket_stream, request, _flat_buf, connPool));
     }
 
+    if (request.get().target() == "/api/user" &&
+        request.get().method() == boost::beast::http::verb::get) {
+
+      co_return (co_await GetUserRoute::getUserRoute(socket_stream, request,
+                                                     _flat_buf, connPool));
+    }
+
     // handle the post route at this section of the code.
     //............POST............................POST..................................POST....................
     if (request.get().target() == "/api/posts" &&
@@ -114,11 +124,12 @@ public:
     }
     // get a single post route and delete a single post route.
 
-    if (request.get().target() == "/api/user/image/upload" &&
+    if (request.get().target() == "/api/user/profilepicture/upload" &&
         request.get().method() == boost::beast::http::verb::post) {
       std::cout << "/api/user/image/upload" << std::endl;
-      co_return (co_await UploadRoute::uploadRoute(socket_stream, request,
-                                                   _flat_buf, connPool));
+      co_return (co_await ProfilePictureUploadRoute::profilePictureUploadRoute(
+          socket_stream, request, _flat_buf, connPool,
+          "assets/profile_image/"));
     }
     // get a single post route and delete a single post route.
 
@@ -267,6 +278,15 @@ public:
       co_return (co_await GetImageRoute::getImageRoute(socket_stream, request));
     }
 
+    regexPath.setRegexUrl(
+        R"(/api/users/profilepicture/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\.(jpg|png|jpeg|svg|gif|avif|webp)$)");
+
+    if (regexPath.isMatched(request.get().target()) &&
+        request.get().method() == boost::beast::http::verb::get) {
+      std::cout << "images route is hit" << std::endl;
+      co_return (co_await GetProfilePictureRoute::getProfilePictureRoute(
+          socket_stream, request));
+    }
     std::cout << "reached home route" << std::endl;
     boost::beast::http::response<boost::beast::http::string_body> res(
         boost::beast::http::status::ok, request.get().version());
